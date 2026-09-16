@@ -6,13 +6,15 @@ A single-file, vanilla HTML/CSS/JS Kanban board built as an internal demo/traini
 
 ## Features
 
-- Four fixed columns: Backlog, In Progress, Blocked, Done
+- Portfolio summary: a live completion figure, a computed narrative, and a callout of overdue items needing escalation
+- Team workload ranking: assignees ranked by active load, flagged when overdue or carrying more than 3 active tasks
+- Delivery timeline: a Gantt-style chart of every task's start-to-due span, colored by status, against a shared date scale
+- Four fixed board columns: Backlog, In Progress, Blocked, Done
 - Drag-and-drop cards between columns, plus a keyboard-accessible "Move ▸" dropdown on every card
 - Add Task modal with client-side validation and optimistic UI updates
 - Inline per-card delete confirmation (no native `confirm()` dialogs)
-- Live summary counts (total, per-status, overdue) in the header
 - Filter bar (project, assignee, priority)
-- Responsive layout that stacks columns below 768px
+- Responsive layout that stacks and scrolls appropriately below 768px
 
 ## Running it
 
