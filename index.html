@@ -7,22 +7,29 @@
 <style>
   /* ===================== Design tokens ===================== */
   :root {
-    --color-bg: #f2f5fa;
+    --color-bg: #eef3fb;
     --color-surface: #ffffff;
-    --color-surface-alt: #eaf0fb;
-    --color-border: #d6e0ee;
-    --color-primary: #0b3d91;
-    --color-primary-dark: #062a66;
-    --color-primary-light: #e6edfb;
-    --color-text: #182437;
-    --color-text-muted: #5a6b85;
-    --color-critical: #c0392b;
-    --color-high: #b8860b;
-    --color-medium: #1d5fbf;
-    --color-low: #6b7280;
-    --color-danger: #c0392b;
-    --color-success: #1e7e45;
-    --color-warning: #b8860b;
+    --color-surface-alt: #eaf1fb;
+    --color-border: #d3e0f0;
+    --color-primary: #2e6da6;
+    --color-primary-dark: #0a2540;
+    --color-primary-light: #e7f0fa;
+    --color-text: #16212f;
+    --color-text-muted: #57697e;
+    --color-red: #c1443c;
+    --color-red-deep: #8f2c25;
+    --color-red-pale: #fbeae8;
+    --color-critical: var(--color-red-deep);
+    --color-high: var(--color-red);
+    --color-medium: var(--color-primary);
+    --color-low: #7e93ac;
+    --color-danger: var(--color-red-deep);
+    --color-success: var(--color-primary-dark);
+    --color-warning: var(--color-red);
+    --status-backlog: #b9c9dc;
+    --status-inprogress: var(--color-primary);
+    --status-blocked: var(--color-red);
+    --status-done: var(--color-primary-dark);
     --space-1: 4px;
     --space-2: 8px;
     --space-3: 12px;
@@ -32,8 +39,9 @@
     --radius: 8px;
     --radius-sm: 4px;
     --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    --shadow-card: 0 1px 3px rgba(11, 61, 145, 0.12), 0 1px 2px rgba(11, 61, 145, 0.08);
-    --shadow-elevated: 0 8px 24px rgba(6, 42, 102, 0.24);
+    --font-serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+    --shadow-card: 0 1px 3px rgba(10, 37, 64, 0.12), 0 1px 2px rgba(10, 37, 64, 0.08);
+    --shadow-elevated: 0 8px 24px rgba(10, 37, 64, 0.28);
   }
 
   * { box-sizing: border-box; }
@@ -123,37 +131,292 @@
     display: inline-block;
   }
 
-  /* Summary strip */
-  .summary-strip {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
-  }
-
-  .summary-chip {
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: var(--radius);
-    padding: var(--space-2) var(--space-3);
-    font-size: 0.82rem;
-    min-width: 100px;
-  }
-
-  .summary-chip .num {
-    display: block;
-    font-size: 1.25rem;
-    font-weight: 700;
-  }
-
-  .summary-chip.overdue { border-color: #ffb3ab; }
-  .summary-chip.overdue .num { color: #ffdcd8; }
-
   /* ===================== Main layout ===================== */
   main {
     padding: var(--space-5);
     max-width: 1600px;
     margin: 0 auto;
+  }
+
+  .section-heading {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    margin: 0 0 var(--space-2);
+  }
+
+  .section-sub {
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-4);
+    max-width: 60ch;
+  }
+
+  /* ===================== Portfolio summary ===================== */
+  .portfolio-summary-wrap {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 6px solid var(--color-primary-dark);
+    border-radius: var(--radius-sm) var(--radius) var(--radius) var(--radius-sm);
+    padding: var(--space-5);
+    margin-bottom: var(--space-5);
+  }
+
+  .ps-hero {
+    display: flex;
+    gap: var(--space-6);
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .ps-figure {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 130px;
+  }
+
+  .ps-number {
+    font-family: var(--font-serif);
+    font-size: 3.2rem;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+  }
+
+  .ps-figure-label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-top: var(--space-2);
+  }
+
+  .ps-narrative { flex: 1; min-width: 260px; }
+
+  .ps-narrative p {
+    margin: 0 0 var(--space-3);
+    font-size: 1rem;
+    max-width: 62ch;
+    color: var(--color-text);
+  }
+
+  .ps-breakdown {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .ps-breakdown li { font-size: 0.85rem; color: var(--color-text-muted); }
+  .ps-count { font-weight: 700; color: var(--color-primary-dark); margin-right: 4px; }
+
+  .ps-risk {
+    margin-top: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-red-pale);
+    border: 1px solid var(--color-red);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    color: var(--color-text);
+  }
+
+  .ps-risk strong { color: var(--color-red-deep); }
+
+  /* ===================== Workload + timeline grid ===================== */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: var(--space-5);
+    margin-bottom: var(--space-5);
+    align-items: start;
+  }
+
+  @media (max-width: 1100px) {
+    .dashboard-grid { grid-template-columns: 1fr; }
+  }
+
+  .workload-wrap, .gantt-wrap {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: var(--space-4);
+  }
+
+  .workload-scroll { overflow-x: auto; }
+
+  .workload-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  .workload-table th {
+    text-align: left;
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    font-weight: 700;
+    padding: var(--space-2) var(--space-2);
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+  }
+
+  .workload-table td {
+    padding: var(--space-2);
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: middle;
+  }
+
+  .workload-table th:nth-child(1), .workload-table td:nth-child(1),
+  .workload-table th:nth-child(3), .workload-table td:nth-child(3),
+  .workload-table th:nth-child(4), .workload-table td:nth-child(4),
+  .workload-table th:nth-child(5), .workload-table td:nth-child(5) {
+    width: 15%;
+    text-align: center;
+  }
+
+  .rank-cell {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    font-size: 1rem;
+  }
+
+  .workload-row-alert { background: var(--color-red-pale); }
+
+  .pill.alert-overdue, .pill.alert-load {
+    text-transform: none;
+    white-space: nowrap;
+    font-size: 0.7rem;
+    letter-spacing: 0;
+  }
+  .pill.alert-overdue { background: var(--color-red); color: #fff; border-color: var(--color-red); }
+  .pill.alert-load { background: var(--color-primary-light); color: var(--color-primary-dark); border-color: var(--color-border); }
+  .muted-cell { color: var(--color-text-muted); }
+
+  /* ===================== Gantt / delivery timeline ===================== */
+  .gantt-scroll { overflow-x: auto; padding-right: 120px; }
+
+  .gantt-chart {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    row-gap: 4px;
+    position: relative;
+    min-width: 620px;
+  }
+
+  .gantt-header-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    align-self: end;
+    padding-bottom: var(--space-2);
+  }
+
+  .gantt-axis {
+    position: relative;
+    height: 24px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .gantt-tick {
+    position: absolute;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    bottom: 4px;
+    white-space: nowrap;
+  }
+
+  .gantt-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-2) var(--space-2) var(--space-2) 0;
+    font-size: 0.78rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .gantt-task-id { font-size: 0.68rem; color: var(--color-text-muted); font-weight: 600; }
+  .gantt-task-title { font-weight: 600; color: var(--color-text); line-height: 1.25; }
+  .gantt-task-assignee { font-size: 0.72rem; color: var(--color-text-muted); }
+
+  .gantt-track {
+    position: relative;
+    border-bottom: 1px solid var(--color-border);
+    min-height: 40px;
+  }
+
+  .gantt-bar {
+    position: absolute;
+    top: 9px;
+    height: 20px;
+    border-radius: 4px;
+    min-width: 12px;
+  }
+
+  .gantt-bar.status-Backlog { background: var(--status-backlog); }
+  .gantt-bar.status-InProgress { background: var(--status-inprogress); }
+  .gantt-bar.status-Blocked { background: var(--status-blocked); }
+  .gantt-bar.status-Done { background: var(--status-done); }
+  .gantt-bar-overdue { box-shadow: 0 0 0 2px var(--color-red-deep) inset; }
+
+  .gantt-status-label {
+    position: absolute;
+    top: 9px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  .gantt-status-label.status-Backlog { color: var(--color-text-muted); }
+  .gantt-status-label.status-InProgress { color: var(--color-primary-dark); }
+  .gantt-status-label.status-Blocked { color: var(--color-red-deep); }
+  .gantt-status-label.status-Done { color: var(--color-primary-dark); }
+
+  .gantt-today-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-red);
+    z-index: 2;
+  }
+
+  .gantt-today-line::after {
+    content: "Today";
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--color-red);
+    white-space: nowrap;
+  }
+
+  .gantt-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .gantt-legend-swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 5px;
+    vertical-align: -1px;
   }
 
   /* Filter bar */
@@ -228,9 +491,14 @@
   }
 
   .column.drop-target {
-    background: #dbe8ff;
+    background: var(--color-primary-light);
     box-shadow: inset 0 0 0 2px var(--color-primary);
   }
+
+  .column[data-column="Backlog"] { border-top: 4px solid var(--status-backlog); }
+  .column[data-column="In Progress"] { border-top: 4px solid var(--status-inprogress); }
+  .column[data-column="Blocked"] { border-top: 4px solid var(--status-blocked); }
+  .column[data-column="Done"] { border-top: 4px solid var(--status-done); }
 
   .column-header {
     display: flex;
@@ -258,6 +526,11 @@
     min-width: 22px;
     text-align: center;
   }
+
+  .column[data-column="Backlog"] .count-badge { background: var(--status-backlog); color: var(--color-primary-dark); }
+  .column[data-column="In Progress"] .count-badge { background: var(--status-inprogress); }
+  .column[data-column="Blocked"] .count-badge { background: var(--status-blocked); }
+  .column[data-column="Done"] .count-badge { background: var(--status-done); }
 
   .column-body {
     padding: var(--space-3);
@@ -346,10 +619,10 @@
     letter-spacing: 0.3px;
   }
 
-  .pill-Critical { background: #fbe4e1; color: var(--color-critical); border-color: #f3b3ab; }
-  .pill-High { background: #fbf0d9; color: var(--color-high); border-color: #edd18f; }
-  .pill-Medium { background: #dfe9fb; color: var(--color-medium); border-color: #aec7f2; }
-  .pill-Low { background: #e7e9ec; color: var(--color-low); border-color: #c7cdd4; }
+  .pill-Critical { background: var(--color-red-deep); color: #fff; border-color: var(--color-red-deep); }
+  .pill-High { background: var(--color-red-pale); color: var(--color-high); border-color: #eabab5; }
+  .pill-Medium { background: var(--color-primary-light); color: var(--color-medium); border-color: #b6cfe6; }
+  .pill-Low { background: #e7ecf2; color: var(--color-low); border-color: #c6d2df; }
 
   .tag {
     background: var(--color-surface-alt);
@@ -358,9 +631,9 @@
   }
 
   .badge-overdue {
-    background: #fbe4e1;
-    color: var(--color-critical);
-    border: 1px solid #f3b3ab;
+    background: var(--color-red-pale);
+    color: var(--color-red-deep);
+    border: 1px solid #eabab5;
   }
 
   .card-actions {
@@ -398,7 +671,7 @@
     font-weight: 700;
     line-height: 1;
   }
-  .icon-btn:hover { background: #fbe4e1; }
+  .icon-btn:hover { background: var(--color-red-pale); }
 
   .delete-confirm {
     display: flex;
@@ -406,8 +679,8 @@
     gap: var(--space-2);
     font-size: 0.8rem;
     margin-top: var(--space-2);
-    background: #fbe4e1;
-    border: 1px solid #f3b3ab;
+    background: var(--color-red-pale);
+    border: 1px solid #eabab5;
     border-radius: var(--radius-sm);
     padding: var(--space-2);
   }
@@ -554,12 +827,31 @@
     <button type="button" class="btn btn-primary" id="open-add-task" aria-haspopup="dialog">+ Add Task</button>
   </div>
   <span class="demo-note">Demo mode: board data lives only in this browser tab's memory. Refreshing the page resets it to the seeded sample data — nothing is saved.</span>
-
-  <!-- Live summary strip: totals per status + overdue -->
-  <div class="summary-strip" id="summary-strip" aria-live="polite"></div>
 </header>
 
 <main>
+  <!-- ===================== Portfolio summary (executive view) ===================== -->
+  <section class="portfolio-summary-wrap" aria-label="Portfolio summary">
+    <h2 class="section-heading">Portfolio summary</h2>
+    <div id="portfolio-summary-body" aria-live="polite"></div>
+  </section>
+
+  <div class="dashboard-grid">
+    <!-- ===================== Team workload + alerts ===================== -->
+    <section class="workload-wrap" aria-label="Team workload and alerts">
+      <h2 class="section-heading">Team workload</h2>
+      <p class="section-sub">Ranked by active load. Flags an assignee who is carrying overdue work or more than 3 active tasks at once.</p>
+      <div class="workload-scroll" id="workload-body" aria-live="polite"></div>
+    </section>
+
+    <!-- ===================== Delivery timeline (Gantt) ===================== -->
+    <section class="gantt-wrap" aria-label="Delivery timeline">
+      <h2 class="section-heading">Delivery timeline</h2>
+      <p class="section-sub">Every step in the portfolio, who owns it, and how its status tracks against the plan.</p>
+      <div id="gantt-body"></div>
+    </section>
+  </div>
+
   <!-- ===================== Filter bar ===================== -->
   <section class="filter-bar" aria-label="Filter tasks">
     <div class="filter-field">
@@ -707,6 +999,7 @@
   /* ===================== Constants ===================== */
   const COLUMNS = ["Backlog", "In Progress", "Blocked", "Done"];
   const PRIORITIES = ["Critical", "High", "Medium", "Low"];
+  const HIGH_LOAD_THRESHOLD = 3;
 
   /* ===================== State: single source of truth ===================== */
   const state = {
@@ -747,6 +1040,27 @@
     return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
   }
 
+  function shortDate(iso) {
+    const d = new Date(iso + "T00:00:00");
+    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  }
+
+  function daysBetween(isoA, isoB) {
+    const a = new Date(isoA + "T00:00:00");
+    const b = new Date(isoB + "T00:00:00");
+    return Math.round((b - a) / 86400000);
+  }
+
+  function addDaysIso(iso, n) {
+    const d = new Date(iso + "T00:00:00");
+    d.setDate(d.getDate() + n);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function statusSlug(status) {
+    return status.replace(/\s+/g, "");
+  }
+
   /* ===================== Seed demo data ===================== */
   function seedTasks() {
     const seed = [
@@ -757,6 +1071,7 @@
         category: "Infrastructure",
         assignee: "R. Lim",
         priority: "High",
+        startDate: "2026-09-01",
         dueDate: "2026-10-05",
         status: "In Progress",
       },
@@ -767,6 +1082,7 @@
         category: "Cybersecurity",
         assignee: "N. Osman",
         priority: "Critical",
+        startDate: "2026-08-25",
         dueDate: "2026-09-10",
         status: "Blocked",
       },
@@ -777,6 +1093,7 @@
         category: "Application Development",
         assignee: "S. Kaur",
         priority: "High",
+        startDate: "2026-09-01",
         dueDate: "2026-09-20",
         status: "In Progress",
       },
@@ -787,6 +1104,7 @@
         category: "Infrastructure",
         assignee: "T. Wong",
         priority: "Medium",
+        startDate: "2026-10-15",
         dueDate: "2026-11-15",
         status: "Backlog",
       },
@@ -797,6 +1115,7 @@
         category: "Compliance",
         assignee: "A. Rahman",
         priority: "Low",
+        startDate: "2026-08-20",
         dueDate: "2026-09-05",
         status: "Backlog",
       },
@@ -807,6 +1126,7 @@
         category: "Data",
         assignee: "M. Chen",
         priority: "Medium",
+        startDate: "2026-08-15",
         dueDate: "2026-09-01",
         status: "Blocked",
       },
@@ -817,6 +1137,7 @@
         category: "Cybersecurity",
         assignee: "N. Osman",
         priority: "High",
+        startDate: "2026-09-01",
         dueDate: "2026-09-28",
         status: "Done",
       },
@@ -827,8 +1148,20 @@
         category: "Infrastructure",
         assignee: "R. Lim",
         priority: "Low",
+        startDate: "2026-07-25",
         dueDate: "2026-08-20",
         status: "Done",
+      },
+      {
+        title: "Microsoft license commissioning",
+        description: "Commission the new Microsoft licensing agreement ahead of the renewal due date.",
+        project: "Vendor Management",
+        category: "Vendor",
+        assignee: "A. Rahman",
+        priority: "Medium",
+        startDate: "2026-09-10",
+        dueDate: "2026-09-23",
+        status: "In Progress",
       },
     ];
 
@@ -861,17 +1194,195 @@
     });
   }
 
-  function renderSummary() {
-    const el = document.getElementById("summary-strip");
+  // Executive view: completion figure, narrative, and the current overdue risk list.
+  // Deliberately reads from the full task set, not the filtered board, since it
+  // reports on the whole portfolio regardless of what a viewer is filtering to.
+  function renderPortfolioSummary() {
+    const el = document.getElementById("portfolio-summary-body");
     const tasks = state.tasks;
     const total = tasks.length;
-    const overdueCount = tasks.filter(isOverdue).length;
+    const doneCount = tasks.filter((t) => t.status === "Done").length;
+    const overdueTasks = tasks.filter(isOverdue);
+    const pct = total ? Math.round((doneCount / total) * 100) : 0;
     const perStatus = COLUMNS.map((c) => ({ status: c, count: tasks.filter((t) => t.status === c).length }));
 
+    if (!total) {
+      el.innerHTML = `<p class="empty-hint">No workstreams tracked yet.</p>`;
+      return;
+    }
+
+    const narrative = `${total} workstream${total === 1 ? "" : "s"} are tracked across the IT portfolio. ` +
+      (overdueTasks.length
+        ? `${overdueTasks.length} ${overdueTasks.length === 1 ? "is" : "are"} past due and need escalation.`
+        : `None are currently overdue.`);
+
+    const riskBlock = overdueTasks.length
+      ? `<div class="ps-risk" role="status">
+          <strong>${overdueTasks.length} overdue ${overdueTasks.length === 1 ? "item" : "items"}:</strong>
+          ${overdueTasks.map((t) => `<span class="ps-risk-item">${escapeHtml(t.title)} — ${escapeHtml(t.assignee)}</span>`).join(", ")}
+        </div>`
+      : "";
+
     el.innerHTML = `
-      <div class="summary-chip"><span class="num">${total}</span>Total tasks</div>
-      ${perStatus.map((s) => `<div class="summary-chip"><span class="num">${s.count}</span>${escapeHtml(s.status)}</div>`).join("")}
-      <div class="summary-chip overdue"><span class="num">${overdueCount}</span>Overdue</div>
+      <div class="ps-hero">
+        <div class="ps-figure">
+          <span class="ps-number">${pct}%</span>
+          <span class="ps-figure-label">complete</span>
+        </div>
+        <div class="ps-narrative">
+          <p>${escapeHtml(narrative)}</p>
+          <ul class="ps-breakdown">
+            ${perStatus.map((s) => `<li><span class="ps-count">${s.count}</span>${escapeHtml(s.status)}</li>`).join("")}
+          </ul>
+        </div>
+      </div>
+      ${riskBlock}
+    `;
+  }
+
+  // Per-assignee ranking: sorted by overdue risk first, then active load.
+  function computeWorkload() {
+    const byAssignee = {};
+    state.tasks.forEach((t) => {
+      if (!byAssignee[t.assignee]) {
+        byAssignee[t.assignee] = { assignee: t.assignee, total: 0, active: 0, blocked: 0, done: 0, overdue: 0 };
+      }
+      const w = byAssignee[t.assignee];
+      w.total += 1;
+      if (t.status === "Done") w.done += 1;
+      else w.active += 1;
+      if (t.status === "Blocked") w.blocked += 1;
+      if (isOverdue(t)) w.overdue += 1;
+    });
+    return Object.values(byAssignee).sort((a, b) => {
+      if (b.overdue !== a.overdue) return b.overdue - a.overdue;
+      if (b.active !== a.active) return b.active - a.active;
+      return b.total - a.total;
+    });
+  }
+
+  function renderWorkload() {
+    const el = document.getElementById("workload-body");
+    const rows = computeWorkload();
+
+    if (!rows.length) {
+      el.innerHTML = `<p class="empty-hint">No assignees yet.</p>`;
+      return;
+    }
+
+    el.innerHTML = `
+      <table class="workload-table">
+        <thead>
+          <tr>
+            <th scope="col">Rank</th>
+            <th scope="col">Assignee</th>
+            <th scope="col">Active</th>
+            <th scope="col">Blocked</th>
+            <th scope="col">Done</th>
+            <th scope="col">Alert</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((w, i) => {
+            const alerts = [];
+            if (w.overdue > 0) alerts.push(`<span class="pill alert-overdue">⚠ Overdue</span>`);
+            if (w.active >= HIGH_LOAD_THRESHOLD) alerts.push(`<span class="pill alert-load">High load</span>`);
+            return `
+              <tr class="${alerts.length ? "workload-row-alert" : ""}">
+                <td class="rank-cell">${i + 1}</td>
+                <td>${escapeHtml(w.assignee)}</td>
+                <td>${w.active}</td>
+                <td>${w.blocked}</td>
+                <td>${w.done}</td>
+                <td>${alerts.length ? alerts.join(" ") : `<span class="muted-cell">—</span>`}</td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    `;
+  }
+
+  // Delivery timeline (Gantt): each row is one step, its bar spans start→due,
+  // colored by status, positioned on a shared date scale across all tasks.
+  function buildTimelineScale(tasks) {
+    if (!tasks.length) return null;
+    let min = tasks[0].startDate;
+    let max = tasks[0].dueDate;
+    tasks.forEach((t) => {
+      if (t.startDate < min) min = t.startDate;
+      if (t.dueDate > max) max = t.dueDate;
+    });
+    min = addDaysIso(min, -3);
+    max = addDaysIso(max, 3);
+    return { min: min, max: max, totalDays: Math.max(daysBetween(min, max), 1) };
+  }
+
+  function scalePct(iso, scale) {
+    return Math.min(100, Math.max(0, (daysBetween(scale.min, iso) / scale.totalDays) * 100));
+  }
+
+  function buildTicks(scale, count) {
+    const ticks = [];
+    for (let i = 0; i <= count; i++) {
+      const day = Math.round((scale.totalDays / count) * i);
+      const iso = addDaysIso(scale.min, day);
+      ticks.push({ iso: iso, pct: (day / scale.totalDays) * 100 });
+    }
+    return ticks;
+  }
+
+  function renderGanttRow(task, scale) {
+    const left = scalePct(task.startDate, scale);
+    const width = Math.max(scalePct(task.dueDate, scale) - left, 1.5);
+    const slug = statusSlug(task.status);
+    const overdueClass = isOverdue(task) ? " gantt-bar-overdue" : "";
+    const tooltip = `${task.title} — ${task.status} (${formatDate(task.startDate)} to ${formatDate(task.dueDate)})`;
+
+    return `
+      <div class="gantt-label">
+        <span class="gantt-task-id">${escapeHtml(task.id)}</span>
+        <span class="gantt-task-title">${escapeHtml(task.title)}</span>
+        <span class="gantt-task-assignee">👤 ${escapeHtml(task.assignee)}</span>
+      </div>
+      <div class="gantt-track">
+        <div class="gantt-bar status-${escapeHtml(slug)}${overdueClass}" style="left:${left}%; width:${width}%;" title="${escapeHtml(tooltip)}"></div>
+        <span class="gantt-status-label status-${escapeHtml(slug)}" style="left:calc(${left + width}% + 8px);">${escapeHtml(task.status)}</span>
+      </div>
+    `;
+  }
+
+  function renderGantt() {
+    const el = document.getElementById("gantt-body");
+    const tasks = [...state.tasks].sort((a, b) => a.startDate.localeCompare(b.startDate));
+    const scale = buildTimelineScale(tasks);
+
+    if (!scale) {
+      el.innerHTML = `<p class="empty-hint">No tasks to chart.</p>`;
+      return;
+    }
+
+    const ticks = buildTicks(scale, 5);
+    const todayPct = scalePct(todayIso(), scale);
+    const ticksHtml = ticks.map((t) => `<span class="gantt-tick" style="left:${t.pct}%">${escapeHtml(shortDate(t.iso))}</span>`).join("");
+    const rowsHtml = tasks.map((t) => renderGanttRow(t, scale)).join("");
+
+    el.innerHTML = `
+      <div class="gantt-scroll">
+        <div class="gantt-chart">
+          <div class="gantt-today-line" style="left:calc(220px + (100% - 220px) * ${(todayPct / 100).toFixed(4)});"></div>
+          <div class="gantt-header-label">Step</div>
+          <div class="gantt-axis">${ticksHtml}</div>
+          ${rowsHtml}
+        </div>
+      </div>
+      <div class="gantt-legend">
+        <span><span class="gantt-legend-swatch" style="background:var(--status-backlog)"></span>Backlog</span>
+        <span><span class="gantt-legend-swatch" style="background:var(--status-inprogress)"></span>In Progress</span>
+        <span><span class="gantt-legend-swatch" style="background:var(--status-blocked)"></span>Blocked</span>
+        <span><span class="gantt-legend-swatch" style="background:var(--status-done)"></span>Done</span>
+        <span><span class="gantt-legend-swatch" style="background:var(--color-red); border-radius:0; width:2px;"></span>Today</span>
+      </div>
     `;
   }
 
@@ -947,7 +1458,9 @@
     }).join("");
 
     attachDragAndDropHandlers();
-    renderSummary();
+    renderPortfolioSummary();
+    renderWorkload();
+    renderGantt();
   }
 
   /* ===================== Task mutations ===================== */
@@ -1175,6 +1688,7 @@
       category: form.category.value,
       assignee: form.assignee.value.trim(),
       priority: form.priority.value || "Medium",
+      startDate: todayIso(),
       dueDate: form.dueDate.value,
       status: form.status.value || "Backlog",
     };
